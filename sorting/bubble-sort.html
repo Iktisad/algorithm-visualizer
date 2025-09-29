@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Bubble Sort Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+      .bar {
+        transition: background-color 0.15s ease, transform 0.15s ease;
+      }
+      .bar-container {
+        min-height: 280px;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      .pseudocode-highlight {
+        background-color: #dbeafe !important;
+        border-left: 3px solid #3b82f6;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen p-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- Breadcrumb Navigation -->
+      <nav class="mb-6" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-sm text-gray-600">
+          <li>
+            <a
+              href="../index.html"
+              class="flex items-center hover:text-blue-600 transition-colors"
+            >
+              <svg
+                class="w-4 h-4 mr-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 5a2 2 0 012-2h4a2 2 0 012 2v3H8V5z"
+                ></path>
+              </svg>
+              Algorithms Lab
+            </a>
+          </li>
+          <li class="flex items-center">
+            <svg
+              class="w-4 h-4 text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            <span class="ml-2 text-gray-500">Sorting</span>
+          </li>
+          <li class="flex items-center">
+            <svg
+              class="w-4 h-4 text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            <span class="ml-2 font-medium text-gray-900">Bubble Sort</span>
+          </li>
+        </ol>
+      </nav>
+
+      <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">
+        Bubble Sort
+      </h1>
+
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Pseudocode Panel -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-xl font-bold mb-4 text-gray-800">Pseudocode</h2>
+          <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm">
+            <div id="line1" class="py-2 px-3 rounded transition-colors">
+              <span class="text-purple-600">for</span> i = 0
+              <span class="text-purple-600">to</span> n-2:
+            </div>
+            <div id="line2" class="py-2 px-3 rounded transition-colors ml-4">
+              <span class="text-purple-600">for</span> j = 0
+              <span class="text-purple-600">to</span> n-2-i:
+            </div>
+            <div id="line3" class="py-2 px-3 rounded transition-colors ml-8">
+              <span class="text-purple-600">if</span> array[j] > array[j+1]:
+            </div>
+            <div id="line4" class="py-2 px-3 rounded transition-colors ml-12">
+              <span class="text-blue-600">swap</span>(array[j], array[j+1])
+            </div>
+          </div>
+          <div class="mt-4 text-sm text-gray-600">
+            <p class="mb-2">
+              <strong>Current line highlighted</strong> shows which part of the
+              algorithm is executing.
+            </p>
+            <p class="text-xs">
+              The outer loop controls passes through the array, while the inner
+              loop compares adjacent elements.
+            </p>
+          </div>
+        </div>
+
+        <!-- Visualization Panel -->
+        <div class="md:col-span-2 bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-xl font-bold mb-4 text-gray-800">
+            Bubble Sort Visualization
+          </h2>
+          <div class="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h3 class="font-semibold text-blue-900 mb-2">
+              How Bubble Sort Works
+            </h3>
+            <p class="text-sm text-blue-800">
+              Bubble Sort repeatedly compares adjacent elements and swaps them
+              if they are in the wrong order. The largest element "bubbles up"
+              to its correct position after each pass. This continues until the
+              array is fully sorted. Watch the
+              <span class="font-semibold text-amber-600">yellow bars</span>
+              being compared,
+              <span class="font-semibold text-red-600">red bars</span> being
+              swapped, and
+              <span class="font-semibold text-green-600">green bars</span>
+              showing sorted elements.
+            </p>
+          </div>
+          <div
+            id="arrayContainer"
+            class="bar-container min-h-64 flex items-end justify-start space-x-1 border-2 border-gray-200 rounded p-4"
+          >
+            <div class="text-gray-500 m-auto">
+              Click "Generate Array" to start
+            </div>
+          </div>
+          <div id="stepInfo" class="mt-4 text-center text-sm text-gray-600">
+            Ready to sort
+          </div>
+
+          <!-- Controls -->
+          <div class="mt-6 flex flex-wrap items-center gap-4 justify-center">
+            <div class="flex items-center gap-2">
+              <label for="arraySize" class="text-sm font-medium">Size:</label>
+              <input
+                id="arraySize"
+                type="range"
+                min="5"
+                max="120"
+                value="20"
+                class="w-20"
+              />
+              <span class="text-sm w-8">20</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <label for="speed" class="text-sm font-medium">Speed:</label>
+              <input
+                id="speed"
+                type="range"
+                min="1"
+                max="10"
+                value="5"
+                class="w-20"
+              />
+            </div>
+
+            <button
+              id="generateBtn"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+              Generate Array
+            </button>
+
+            <button
+              id="sortBtn"
+              class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+            >
+              ▶ Play
+            </button>
+
+            <button
+              id="stepBtn"
+              class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors"
+            >
+              ⏭ Step
+            </button>
+
+            <button
+              id="resetBtn"
+              class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Algorithm Info -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-xl font-bold mb-4 text-gray-800">Algorithm Info</h2>
+          <div class="space-y-3 text-sm">
+            <div>
+              <span class="font-semibold">Time Complexity:</span>
+              <div class="ml-2">
+                <div>Best: O(n)</div>
+                <div>Average: O(n²)</div>
+                <div>Worst: O(n²)</div>
+              </div>
+            </div>
+            <div><span class="font-semibold">Space Complexity:</span> O(1)</div>
+            <div><span class="font-semibold">Stable:</span> Yes</div>
+            <div><span class="font-semibold">In-Place:</span> Yes</div>
+          </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-xl font-bold mb-4 text-gray-800">Performance</h2>
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-sm font-medium">Array Size:</span>
+              <span id="currentSize" class="text-sm">-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-medium">Comparisons:</span>
+              <span id="comparisons" class="text-sm">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-medium">Swaps:</span>
+              <span id="swaps" class="text-sm">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-medium">Actual Time:</span>
+              <span id="actualTime" class="text-sm">-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-medium">Theoretical (n²):</span>
+              <span id="theoreticalTime" class="text-sm">-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm font-medium">Passes:</span>
+              <span id="passes" class="text-sm">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Complexity Graph -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-xl font-bold mb-4 text-gray-800">
+            Complexity Analysis
+          </h2>
+          <div style="position: relative; height: 200px; width: 100%">
+            <canvas id="complexityChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class BubbleSortVisualizer {
+        constructor() {
+          this.array = [];
+          this.originalArray = [];
+          this.isAnimating = false;
+          this.isPaused = false;
+          this.animationSpeed = 500;
+          this.currentI = 0;
+          this.currentJ = 0;
+          this.comparisons = 0;
+          this.swaps = 0;
+          this.passes = 0;
+          this.startTime = 0;
+          this.stepMode = false;
+          this.animationFrame = null;
+
+          this.initializeEventListeners();
+          this.initializeChart();
+          this.generateArray(); // Generate initial array
+        }
+
+        initializeEventListeners() {
+          document
+            .getElementById("generateBtn")
+            .addEventListener("click", () => this.generateArray());
+          document
+            .getElementById("sortBtn")
+            .addEventListener("click", () => this.togglePlayPause());
+          document
+            .getElementById("stepBtn")
+            .addEventListener("click", () => this.startStepMode());
+          document
+            .getElementById("resetBtn")
+            .addEventListener("click", () => this.reset());
+          document.getElementById("speed").addEventListener("input", (e) => {
+            this.animationSpeed = 1100 - parseInt(e.target.value) * 100;
+          });
+
+          // Update size display when slider changes
+          const arraySizeSlider = document.getElementById("arraySize");
+          const arraySizeDisplay = arraySizeSlider.nextElementSibling;
+          arraySizeSlider.addEventListener("input", (e) => {
+            arraySizeDisplay.textContent = e.target.value;
+          });
+        }
+
+        generateArray() {
+          const size = Math.min(
+            120,
+            Math.max(5, parseInt(document.getElementById("arraySize").value))
+          );
+          document.getElementById("arraySize").value = size;
+          this.array = Array.from({ length: size }, (_, i) => i + 1);
+          this.originalArray = [...this.array];
+          this.shuffleArray();
+          this.renderArray();
+          this.resetMetrics();
+          this.updatePerformanceMetrics();
+        }
+
+        shuffleArray() {
+          for (let i = this.array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.array[i], this.array[j]] = [this.array[j], this.array[i]];
+          }
+        }
+
+        renderArray() {
+          const container = document.getElementById("arrayContainer");
+          const n = this.array.length;
+
+          // Clear container efficiently
+          container.innerHTML = "";
+
+          if (n === 0) {
+            container.innerHTML =
+              '<div class="text-gray-500 m-auto">Click "New Array" to start</div>';
+            return;
+          }
+
+          const maxValue = Math.max(...this.array);
+          const containerWidth = container.clientWidth - 32;
+
+          // Adaptive bar width based on array size
+          let barWidth;
+          let fontSize;
+          let showLabels = true;
+
+          if (n <= 20) {
+            barWidth = Math.max(20, Math.min(40, containerWidth / n - 4));
+            fontSize = "12px";
+          } else if (n <= 50) {
+            barWidth = Math.max(12, containerWidth / n - 2);
+            fontSize = "10px";
+          } else if (n <= 80) {
+            barWidth = Math.max(8, containerWidth / n - 1);
+            fontSize = "8px";
+            showLabels = false;
+          } else {
+            barWidth = Math.max(4, containerWidth / n - 0.5);
+            showLabels = false;
+          }
+
+          // Create document fragment for better performance
+          const fragment = document.createDocumentFragment();
+
+          this.array.forEach((value, index) => {
+            const bar = document.createElement("div");
+            const height = (value / maxValue) * 220;
+
+            bar.className = "bar";
+            bar.style.width = `${barWidth}px`;
+            bar.style.height = `${height}px`;
+            bar.style.minHeight = "4px";
+            bar.style.backgroundColor = "#3B82F6";
+            bar.style.display = "flex";
+            bar.style.alignItems = "end";
+            bar.style.justifyContent = "center";
+            bar.style.flexShrink = "0";
+            bar.dataset.index = index;
+            bar.dataset.value = value;
+
+            if (showLabels) {
+              const label = document.createElement("span");
+              label.textContent = value;
+              label.style.fontSize = fontSize;
+              label.style.color = "white";
+              label.style.fontWeight = "bold";
+              label.style.textShadow = "1px 1px 1px rgba(0,0,0,0.5)";
+              label.style.userSelect = "none";
+              bar.appendChild(label);
+            }
+
+            fragment.appendChild(bar);
+          });
+
+          container.appendChild(fragment);
+        }
+
+        highlightBars(indices, color) {
+          const bars = document.querySelectorAll(".bar");
+          bars.forEach((bar, index) => {
+            if (indices.includes(index)) {
+              bar.style.backgroundColor = color;
+              bar.style.transform = "scale(1.05)";
+            } else {
+              bar.style.backgroundColor = "#3B82F6";
+              bar.style.transform = "scale(1)";
+            }
+          });
+        }
+
+        async swapBars(i, j) {
+          return new Promise((resolve) => {
+            const bars = document.querySelectorAll(".bar");
+            if (!bars[i] || !bars[j]) {
+              resolve();
+              return;
+            }
+
+            const bar1 = bars[i];
+            const bar2 = bars[j];
+
+            // Get bar widths for smooth swap animation
+            const barWidth = bar1.offsetWidth + 2;
+
+            // Visual swap animation
+            bar1.style.transform = `translateX(${
+              (j - i) * barWidth
+            }px) scale(1.05)`;
+            bar2.style.transform = `translateX(${
+              (i - j) * barWidth
+            }px) scale(1.05)`;
+
+            setTimeout(() => {
+              // Swap in DOM
+              const parent = bar1.parentNode;
+              const nextSibling1 = bar1.nextSibling;
+              const nextSibling2 = bar2.nextSibling;
+
+              if (nextSibling1 === bar2) {
+                parent.insertBefore(bar2, bar1);
+              } else if (nextSibling2 === bar1) {
+                parent.insertBefore(bar1, bar2);
+              } else {
+                const temp = document.createElement("div");
+                parent.insertBefore(temp, bar1);
+                parent.insertBefore(bar1, bar2);
+                parent.insertBefore(bar2, temp);
+                parent.removeChild(temp);
+              }
+
+              // Reset transforms
+              bar1.style.transform = "scale(1)";
+              bar2.style.transform = "scale(1)";
+
+              resolve();
+            }, 200);
+          });
+        }
+
+        togglePlayPause() {
+          if (this.isAnimating && !this.stepMode && !this.isPaused) {
+            this.pauseAnimation();
+          } else if (this.isPaused) {
+            this.resumeAnimation();
+          } else {
+            this.startAutoSort();
+          }
+        }
+
+        async startAutoSort() {
+          if (this.isAnimating) return;
+
+          this.isAnimating = true;
+          this.stepMode = false;
+          this.startTime = performance.now();
+
+          const sortBtn = document.getElementById("sortBtn");
+          sortBtn.innerHTML = "⏸ Pause";
+          const stepBtn = document.getElementById("stepBtn");
+          if (stepBtn) stepBtn.disabled = true;
+
+          await this.bubbleSortAnimation();
+
+          // Only finalize if we completed without being paused
+          if (!this.isPaused) {
+            this.isAnimating = false;
+            sortBtn.innerHTML = "▶ Play";
+            if (stepBtn) stepBtn.disabled = false;
+
+            this.highlightBars(
+              Array.from({ length: this.array.length }, (_, i) => i),
+              "#10B981"
+            );
+            this.highlightPseudocode(null);
+            document.getElementById("stepInfo").textContent =
+              "Sorting completed!";
+          }
+        }
+
+        startStepMode() {
+          if (this.isAnimating && !this.stepMode) return;
+
+          if (!this.stepMode) {
+            this.stepMode = true;
+            this.isAnimating = true;
+            this.startTime = performance.now();
+            const stepBtn = document.getElementById("stepBtn");
+            if (stepBtn) stepBtn.innerHTML = "⏭ Next";
+            const sortBtn = document.getElementById("sortBtn");
+            if (sortBtn) sortBtn.disabled = true;
+          }
+
+          this.bubbleSortStep();
+        }
+
+        async bubbleSortAnimation() {
+          const n = this.array.length;
+          let worstCaseFlag = true; // Track if we're following worst-case path
+
+          for (let i = this.currentI; i < n - 1 && !this.isPaused; i++) {
+            this.currentI = i;
+            this.passes = i + 1;
+            let swapped = false;
+
+            // Highlight outer loop pseudocode
+            this.highlightPseudocode(0);
+
+            for (let j = this.currentJ; j < n - 1 - i && !this.isPaused; j++) {
+              this.currentJ = j;
+              this.comparisons++;
+
+              // Highlight inner loop pseudocode
+              this.highlightPseudocode(1);
+
+              // Highlight current comparison
+              this.highlightBars([j, j + 1], "#F59E0B");
+              document.getElementById("stepInfo").textContent = `Pass ${
+                i + 1
+              }: Comparing elements at positions ${j} and ${j + 1}`;
+
+              this.updatePerformanceMetrics();
+
+              await this.delay(this.animationSpeed);
+
+              // Highlight comparison condition pseudocode before evaluating
+              this.highlightPseudocode(2);
+
+              // Brief delay to show the comparison highlight
+              await this.delay(this.animationSpeed / 3);
+
+              if (this.isPaused) return; // Exit if paused during delay
+
+              if (this.array[j] > this.array[j + 1]) {
+                // Highlight for swap
+                this.highlightBars([j, j + 1], "#EF4444");
+
+                [this.array[j], this.array[j + 1]] = [
+                  this.array[j + 1],
+                  this.array[j],
+                ];
+
+                // Highlight swap pseudocode
+                this.highlightPseudocode(3);
+
+                await this.swapBars(j, j + 1);
+                this.swaps++;
+                swapped = true;
+
+                // Brief delay to show swap pseudocode
+                await this.delay(this.animationSpeed / 2);
+
+                if (this.isPaused) return; // Exit if paused during swap
+
+                document.getElementById("stepInfo").textContent = `Pass ${
+                  i + 1
+                }: Swapped elements at positions ${j} and ${j + 1}`;
+              }
+
+              this.updatePerformanceMetrics();
+            }
+
+            // Highlight sorted portion
+            this.highlightBars([n - 1 - i], "#10B981");
+
+            // Reset currentJ for next iteration
+            this.currentJ = 0;
+
+            if (!swapped) {
+              worstCaseFlag = false; // Early exit means not worst case
+              break;
+            }
+          }
+
+          // Update metrics with case determination
+          this.updatePerformanceMetrics(worstCaseFlag);
+
+          // Clear pseudocode highlighting when done
+          this.highlightPseudocode(null);
+        }
+
+        bubbleSortStep() {
+          if (this.currentI >= this.array.length - 1) {
+            this.isAnimating = false;
+            const stepBtn = document.getElementById("stepBtn");
+            const sortBtn = document.getElementById("sortBtn");
+            if (stepBtn) {
+              stepBtn.innerHTML = "⏭ Step";
+              stepBtn.disabled = true;
+            }
+            if (sortBtn) sortBtn.disabled = false;
+            this.highlightBars(
+              Array.from({ length: this.array.length }, (_, i) => i),
+              "#10B981"
+            );
+            this.highlightPseudocode(null);
+            document.getElementById("stepInfo").textContent =
+              "Sorting completed!";
+            return;
+          }
+
+          const n = this.array.length;
+
+          if (this.currentJ < n - 1 - this.currentI) {
+            this.comparisons++;
+
+            // Highlight inner loop
+            this.highlightPseudocode(1);
+
+            this.highlightBars([this.currentJ, this.currentJ + 1], "#F59E0B");
+            document.getElementById("stepInfo").textContent = `Pass ${
+              this.currentI + 1
+            }: Comparing elements at positions ${this.currentJ} and ${
+              this.currentJ + 1
+            }`;
+
+            if (this.array[this.currentJ] > this.array[this.currentJ + 1]) {
+              this.highlightPseudocode(2);
+              this.highlightBars([this.currentJ, this.currentJ + 1], "#EF4444");
+
+              setTimeout(() => {
+                this.highlightPseudocode(3);
+              }, 100);
+
+              [this.array[this.currentJ], this.array[this.currentJ + 1]] = [
+                this.array[this.currentJ + 1],
+                this.array[this.currentJ],
+              ];
+              this.swapBars(this.currentJ, this.currentJ + 1);
+              this.swaps++;
+
+              document.getElementById("stepInfo").textContent = `Pass ${
+                this.currentI + 1
+              }: Swapped elements at positions ${this.currentJ} and ${
+                this.currentJ + 1
+              }`;
+            }
+
+            this.currentJ++;
+          } else {
+            this.highlightBars([n - 1 - this.currentI], "#10B981");
+            this.highlightPseudocode(0);
+            this.currentI++;
+            this.passes = this.currentI;
+            this.currentJ = 0;
+          }
+
+          this.updatePerformanceMetrics();
+        }
+
+        pauseAnimation() {
+          this.isPaused = true;
+          const sortBtn = document.getElementById("sortBtn");
+          sortBtn.innerHTML = "▶ Resume";
+          document.getElementById("stepInfo").textContent =
+            "Paused - Click Resume to continue";
+        }
+
+        resumeAnimation() {
+          this.isPaused = false;
+          const sortBtn = document.getElementById("sortBtn");
+          sortBtn.innerHTML = "⏸ Pause";
+          document.getElementById("stepInfo").textContent = "Sorting...";
+          this.bubbleSortAnimation();
+        }
+
+        highlightPseudocode(lineNumber) {
+          const lines = ["line1", "line2", "line3", "line4"];
+          lines.forEach((lineId, index) => {
+            const element = document.getElementById(lineId);
+            if (element) {
+              if (index === lineNumber) {
+                element.classList.add("pseudocode-highlight");
+              } else {
+                element.classList.remove("pseudocode-highlight");
+              }
+            }
+          });
+        }
+
+        reset() {
+          this.isAnimating = false;
+          this.isPaused = false;
+          this.stepMode = false;
+          this.currentI = 0;
+          this.currentJ = 0;
+
+          const sortBtn = document.getElementById("sortBtn");
+          const stepBtn = document.getElementById("stepBtn");
+
+          if (sortBtn) {
+            sortBtn.innerHTML = "▶ Play";
+            sortBtn.disabled = false;
+          }
+
+          if (stepBtn) {
+            stepBtn.disabled = false;
+            stepBtn.innerHTML = "⏭ Step";
+          }
+
+          if (this.originalArray.length > 0) {
+            this.array = [...this.originalArray];
+            this.shuffleArray();
+            this.renderArray();
+          }
+
+          this.resetMetrics();
+          this.updatePerformanceMetrics();
+          this.highlightPseudocode(null);
+          document.getElementById("stepInfo").textContent = "Ready to sort";
+        }
+
+        resetMetrics() {
+          this.comparisons = 0;
+          this.swaps = 0;
+          this.passes = 0;
+          this.startTime = 0;
+        }
+
+        updatePerformanceMetrics(worstCaseFlag = null) {
+          const n = this.array.length;
+          const currentTime =
+            this.startTime > 0
+              ? (performance.now() - this.startTime).toFixed(2)
+              : 0;
+          const worstCaseOps = (n * (n - 1)) / 2;
+          const bestCaseOps = n - 1;
+          const avgCaseOps = Math.floor((n * (n - 1)) / 4);
+
+          document.getElementById("currentSize").textContent = n;
+          document.getElementById("comparisons").textContent = this.comparisons;
+          document.getElementById("swaps").textContent = this.swaps;
+          document.getElementById("actualTime").textContent =
+            currentTime + " ms";
+
+          // Determine which case we're in
+          let caseType = "";
+          if (worstCaseFlag !== null) {
+            if (worstCaseFlag) {
+              caseType = " (Worst Case)";
+            } else {
+              caseType = this.passes === 1 ? " (Best Case)" : " (Average Case)";
+            }
+          }
+
+          document.getElementById(
+            "theoreticalTime"
+          ).textContent = `Best: ${bestCaseOps}, Avg: ~${avgCaseOps}, Worst: ${worstCaseOps}${caseType}`;
+          document.getElementById("passes").textContent = this.passes;
+        }
+
+        delay(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        initializeChart() {
+          const ctx = document
+            .getElementById("complexityChart")
+            .getContext("2d");
+          const sizes = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
+
+          new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: sizes,
+              datasets: [
+                {
+                  label: "Best Case O(n)",
+                  data: sizes.map((n) => n - 1),
+                  borderColor: "#10B981",
+                  backgroundColor: "rgba(16, 185, 129, 0.1)",
+                  tension: 0.1,
+                  pointRadius: 3,
+                  borderWidth: 2,
+                },
+                {
+                  label: "Average Case O(n²)",
+                  data: sizes.map((n) => (n * (n - 1)) / 4),
+                  borderColor: "#F59E0B",
+                  backgroundColor: "rgba(245, 158, 11, 0.1)",
+                  tension: 0.1,
+                  pointRadius: 3,
+                  borderWidth: 2,
+                },
+                {
+                  label: "Worst Case O(n²)",
+                  data: sizes.map((n) => (n * (n - 1)) / 2),
+                  borderColor: "#EF4444",
+                  backgroundColor: "rgba(239, 68, 68, 0.1)",
+                  tension: 0.1,
+                  pointRadius: 3,
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: "Operations",
+                  },
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: "Array Size",
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  display: true,
+                  position: "top",
+                },
+              },
+            },
+          });
+        }
+      }
+
+      // Initialize the visualizer
+      const visualizer = new BubbleSortVisualizer();
+    </script>
+  </body>
+</html>
