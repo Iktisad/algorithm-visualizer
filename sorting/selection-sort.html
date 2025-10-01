@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Advanced Selection Sort Visualizer</title>
+    <title>Selection Sort</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
@@ -109,7 +109,8 @@
               <span class="text-purple-600">to</span> n-1:
             </div>
             <div id="line4" class="py-2 px-3 rounded transition-colors ml-8">
-              <span class="text-purple-600">if</span> array[j] < array[minIndex]:
+              <span class="text-purple-600">if</span> array[j] <
+              array[minIndex]:
             </div>
             <div id="line5" class="py-2 px-3 rounded transition-colors ml-12">
               minIndex = j
@@ -124,7 +125,8 @@
               algorithm is executing.
             </p>
             <p class="text-xs">
-              Selection sort finds the minimum element in the unsorted portion and places it at the beginning.
+              Selection sort finds the minimum element in the unsorted portion
+              and places it at the beginning.
             </p>
           </div>
         </div>
@@ -139,12 +141,18 @@
               How Selection Sort Works
             </h3>
             <p class="text-sm text-blue-800">
-              Selection Sort divides the array into sorted and unsorted portions. It repeatedly finds the minimum element 
-              from the unsorted portion and swaps it with the first unsorted element. Watch the
-              <span class="font-semibold text-amber-600">yellow bars</span> being compared,
-              <span class="font-semibold text-purple-600">purple bar</span> showing the current minimum,
-              <span class="font-semibold text-red-600">red bars</span> being swapped, and
-              <span class="font-semibold text-green-600">green bars</span> showing sorted elements.
+              Selection Sort divides the array into sorted and unsorted
+              portions. It repeatedly finds the minimum element from the
+              unsorted portion and swaps it with the first unsorted element.
+              Watch the
+              <span class="font-semibold text-amber-600">yellow bars</span>
+              being compared,
+              <span class="font-semibold text-purple-600">purple bar</span>
+              showing the current minimum,
+              <span class="font-semibold text-red-600">red bars</span> being
+              swapped, and
+              <span class="font-semibold text-green-600">green bars</span>
+              showing sorted elements.
             </p>
           </div>
           <div
@@ -300,10 +308,18 @@
         }
 
         initializeEventListeners() {
-          document.getElementById("generateBtn").addEventListener("click", () => this.generateArray());
-          document.getElementById("sortBtn").addEventListener("click", () => this.togglePlayPause());
-          document.getElementById("stepBtn").addEventListener("click", () => this.startStepMode());
-          document.getElementById("resetBtn").addEventListener("click", () => this.reset());
+          document
+            .getElementById("generateBtn")
+            .addEventListener("click", () => this.generateArray());
+          document
+            .getElementById("sortBtn")
+            .addEventListener("click", () => this.togglePlayPause());
+          document
+            .getElementById("stepBtn")
+            .addEventListener("click", () => this.startStepMode());
+          document
+            .getElementById("resetBtn")
+            .addEventListener("click", () => this.reset());
           document.getElementById("speed").addEventListener("input", (e) => {
             this.animationSpeed = 1100 - parseInt(e.target.value) * 100;
           });
@@ -316,9 +332,12 @@
         }
 
         generateArray() {
-          const size = Math.min(120, Math.max(5, parseInt(document.getElementById("arraySize").value)));
+          const size = Math.min(
+            120,
+            Math.max(5, parseInt(document.getElementById("arraySize").value))
+          );
           document.getElementById("arraySize").value = size;
-          
+
           // Reset all state pointers and flags
           this.isAnimating = false;
           this.isPaused = false;
@@ -326,7 +345,7 @@
           this.currentI = 0;
           this.currentJ = 0;
           this.minIndex = 0;
-          
+
           // Reset button states
           const sortBtn = document.getElementById("sortBtn");
           const stepBtn = document.getElementById("stepBtn");
@@ -338,7 +357,7 @@
             stepBtn.disabled = false;
             stepBtn.innerHTML = "⏭ Step";
           }
-          
+
           // Generate and render new array
           this.array = Array.from({ length: size }, (_, i) => i + 1);
           this.originalArray = [...this.array];
@@ -364,14 +383,17 @@
           container.innerHTML = "";
 
           if (n === 0) {
-            container.innerHTML = '<div class="text-gray-500 m-auto">Click "Generate Array" to start</div>';
+            container.innerHTML =
+              '<div class="text-gray-500 m-auto">Click "Generate Array" to start</div>';
             return;
           }
 
           const maxValue = Math.max(...this.array);
           const containerWidth = container.clientWidth - 32;
 
-          let barWidth, fontSize, showLabels = true;
+          let barWidth,
+            fontSize,
+            showLabels = true;
 
           if (n <= 20) {
             barWidth = Math.max(20, Math.min(40, containerWidth / n - 4));
@@ -426,7 +448,12 @@
         highlightBars(indices, colors) {
           const bars = document.querySelectorAll(".bar");
           bars.forEach((bar, index) => {
-            const colorMap = new Map(indices.map((idx, i) => [idx, Array.isArray(colors) ? colors[i] : colors]));
+            const colorMap = new Map(
+              indices.map((idx, i) => [
+                idx,
+                Array.isArray(colors) ? colors[i] : colors,
+              ])
+            );
             if (colorMap.has(index)) {
               bar.style.backgroundColor = colorMap.get(index);
               bar.style.transform = "scale(1.05)";
@@ -439,7 +466,7 @@
 
         async swapBars(i, j) {
           if (i === j) return Promise.resolve();
-          
+
           return new Promise((resolve) => {
             const bars = document.querySelectorAll(".bar");
             if (!bars[i] || !bars[j]) {
@@ -451,8 +478,12 @@
             const bar2 = bars[j];
             const barWidth = bar1.offsetWidth + 2;
 
-            bar1.style.transform = `translateX(${(j - i) * barWidth}px) scale(1.05)`;
-            bar2.style.transform = `translateX(${(i - j) * barWidth}px) scale(1.05)`;
+            bar1.style.transform = `translateX(${
+              (j - i) * barWidth
+            }px) scale(1.05)`;
+            bar2.style.transform = `translateX(${
+              (i - j) * barWidth
+            }px) scale(1.05)`;
 
             setTimeout(() => {
               const parent = bar1.parentNode;
@@ -480,6 +511,12 @@
         }
 
         togglePlayPause() {
+          // If in step mode, need to reset before playing
+          if (this.stepMode && !this.isAnimating) {
+            this.reset();
+            return;
+          }
+
           if (this.isAnimating && !this.stepMode && !this.isPaused) {
             this.pauseAnimation();
           } else if (this.isPaused) {
@@ -518,9 +555,13 @@
             sortBtn.innerHTML = "▶ Play";
             if (stepBtn) stepBtn.disabled = false;
 
-            this.highlightBars(Array.from({ length: this.array.length }, (_, i) => [i]), "#10B981");
+            this.highlightBars(
+              Array.from({ length: this.array.length }, (_, i) => [i]),
+              "#10B981"
+            );
             this.highlightPseudocode(null);
-            document.getElementById("stepInfo").textContent = "Sorting completed!";
+            document.getElementById("stepInfo").textContent =
+              "Sorting completed!";
           }
         }
 
@@ -530,25 +571,43 @@
           for (let i = this.currentI; i < n - 1 && !this.isPaused; i++) {
             this.currentI = i;
             this.passes = i + 1;
-            
-            this.highlightPseudocode(0);
-            await this.delay(this.animationSpeed / 2);
 
+            // Highlight outer loop with longer delay
+            this.highlightPseudocode(0);
+            this.highlightBars([i], "#10B981");
+            document.getElementById("stepInfo").textContent = `Pass ${
+              i + 1
+            }: Starting new pass, examining position ${i}`;
+            await this.delay(this.animationSpeed);
+
+            // Highlight minIndex initialization
             this.minIndex = i;
             this.highlightPseudocode(1);
-            await this.delay(this.animationSpeed / 2);
+            this.highlightBars([i, this.minIndex], ["#10B981", "#9333EA"]);
+            document.getElementById("stepInfo").textContent = `Pass ${
+              i + 1
+            }: Setting minimum index to ${i}`;
+            await this.delay(this.animationSpeed);
 
+            // Highlight inner loop start
             this.highlightPseudocode(2);
+            await this.delay(this.animationSpeed / 2);
 
             for (let j = i + 1; j < n && !this.isPaused; j++) {
               this.currentJ = j;
               this.comparisons++;
 
               this.highlightPseudocode(3);
-              this.highlightBars([i, this.minIndex, j], ["#10B981", "#9333EA", "#F59E0B"]);
-              
-              document.getElementById("stepInfo").textContent = 
-                `Pass ${i + 1}: Comparing element at ${j} with current minimum at ${this.minIndex}`;
+              this.highlightBars(
+                [i, this.minIndex, j],
+                ["#10B981", "#9333EA", "#F59E0B"]
+              );
+
+              document.getElementById("stepInfo").textContent = `Pass ${
+                i + 1
+              }: Comparing element at ${j} with current minimum at ${
+                this.minIndex
+              }`;
 
               this.updatePerformanceMetrics();
               await this.delay(this.animationSpeed);
@@ -556,20 +615,34 @@
               if (this.array[j] < this.array[this.minIndex]) {
                 this.highlightPseudocode(4);
                 this.minIndex = j;
-                await this.delay(this.animationSpeed / 2);
+                this.highlightBars([i, this.minIndex], ["#10B981", "#9333EA"]);
+                document.getElementById("stepInfo").textContent = `Pass ${
+                  i + 1
+                }: New minimum found at ${this.minIndex}`;
+                await this.delay(this.animationSpeed);
               }
             }
 
             if (this.minIndex !== i) {
               this.highlightPseudocode(5);
               this.highlightBars([i, this.minIndex], "#EF4444");
-              
-              document.getElementById("stepInfo").textContent = 
-                `Pass ${i + 1}: Swapping elements at ${i} and ${this.minIndex}`;
 
-              [this.array[i], this.array[this.minIndex]] = [this.array[this.minIndex], this.array[i]];
+              document.getElementById("stepInfo").textContent = `Pass ${
+                i + 1
+              }: Swapping elements at ${i} and ${this.minIndex}`;
+
+              [this.array[i], this.array[this.minIndex]] = [
+                this.array[this.minIndex],
+                this.array[i],
+              ];
               await this.swapBars(i, this.minIndex);
               this.swaps++;
+              await this.delay(this.animationSpeed);
+            } else {
+              this.highlightPseudocode(5);
+              document.getElementById("stepInfo").textContent = `Pass ${
+                i + 1
+              }: Element at ${i} is already in correct position`;
               await this.delay(this.animationSpeed / 2);
             }
 
@@ -582,14 +655,23 @@
         }
 
         startStepMode() {
+          // If already animating in play mode, ignore
           if (this.isAnimating && !this.stepMode) return;
 
+          // If not in step mode, initialize step mode
           if (!this.stepMode) {
             this.stepMode = true;
             this.isAnimating = true;
-            this.startTime = performance.now();
-            this.minIndex = this.currentI;
-            this.currentJ = this.currentI + 1;
+            this.isPaused = false;
+            if (this.startTime === 0) {
+              this.startTime = performance.now();
+            }
+            // If just starting, reset pointers
+            if (this.currentI === 0 && this.currentJ === 0) {
+              this.currentI = 0;
+              this.minIndex = 0;
+              this.currentJ = 1;
+            }
             const stepBtn = document.getElementById("stepBtn");
             if (stepBtn) stepBtn.innerHTML = "⏭ Next";
             const sortBtn = document.getElementById("sortBtn");
@@ -599,11 +681,16 @@
           this.selectionSortStep();
         }
 
-        selectionSortStep() {
+        // Improved step state machine: each press advances one phase, never multiple per press
+        async selectionSortStep() {
           const n = this.array.length;
+          if (!this.stepPhase) this.stepPhase = "outer";
 
+          // If sorting is done
           if (this.currentI >= n - 1) {
             this.isAnimating = false;
+            this.stepMode = false;
+            this.stepPhase = null;
             const stepBtn = document.getElementById("stepBtn");
             const sortBtn = document.getElementById("sortBtn");
             if (stepBtn) {
@@ -611,60 +698,138 @@
               stepBtn.disabled = true;
             }
             if (sortBtn) sortBtn.disabled = false;
-            this.highlightBars(Array.from({ length: n }, (_, i) => [i]), "#10B981");
+            this.highlightBars(
+              Array.from({ length: n }, (_, i) => i),
+              "#10B981"
+            );
             this.highlightPseudocode(null);
-            document.getElementById("stepInfo").textContent = "Sorting completed!";
+            document.getElementById("stepInfo").textContent =
+              "Sorting completed!";
             return;
           }
 
-          if (this.currentJ < n) {
-            this.comparisons++;
-            this.highlightPseudocode(3);
-            this.highlightBars([this.currentI, this.minIndex, this.currentJ], ["#10B981", "#9333EA", "#F59E0B"]);
-            
-            document.getElementById("stepInfo").textContent = 
-              `Pass ${this.currentI + 1}: Comparing element at ${this.currentJ} with current minimum at ${this.minIndex}`;
-
-            if (this.array[this.currentJ] < this.array[this.minIndex]) {
-              this.highlightPseudocode(4);
+          switch (this.stepPhase) {
+            case "outer":
+              // Highlight outer loop (line 1)
+              this.highlightPseudocode(0);
+              this.highlightBars([this.currentI], "#10B981");
+              document.getElementById("stepInfo").textContent = `Pass ${
+                this.currentI + 1
+              }: Starting new pass, examining position ${this.currentI}`;
+              this.stepPhase = "minIndex";
+              break;
+            case "minIndex":
+              // Highlight minIndex assignment (line 2)
+              this.minIndex = this.currentI;
+              this.highlightPseudocode(1);
+              this.highlightBars(
+                [this.currentI, this.minIndex],
+                ["#10B981", "#9333EA"]
+              );
+              document.getElementById("stepInfo").textContent = `Pass ${
+                this.currentI + 1
+              }: Setting minimum index to ${this.currentI}`;
+              this.currentJ = this.currentI + 1;
+              this.stepPhase = "inner";
+              break;
+            case "inner":
+              // Highlight inner loop (line 3)
+              if (this.currentJ < n) {
+                this.highlightPseudocode(2);
+                this.highlightBars(
+                  [this.currentI, this.minIndex, this.currentJ],
+                  ["#10B981", "#9333EA", "#F59E0B"]
+                );
+                document.getElementById("stepInfo").textContent = `Pass ${
+                  this.currentI + 1
+                }: Comparing element at ${
+                  this.currentJ
+                } with current minimum at ${this.minIndex}`;
+                this.comparisons++;
+                this.updatePerformanceMetrics();
+                this.stepPhase = "if";
+              } else {
+                this.stepPhase = "swap";
+              }
+              break;
+            case "if":
+              // Highlight if condition (line 4)
+              this.highlightPseudocode(3);
+              if (this.array[this.currentJ] < this.array[this.minIndex]) {
+                this.stepPhase = "minUpdate";
+              } else {
+                this.currentJ++;
+                this.stepPhase = "inner";
+              }
+              break;
+            case "minUpdate":
+              // Highlight minIndex update (line 5)
               this.minIndex = this.currentJ;
-            }
-
-            this.currentJ++;
-            this.updatePerformanceMetrics();
-          } else {
-            if (this.minIndex !== this.currentI) {
+              this.highlightPseudocode(4);
+              this.highlightBars(
+                [this.currentI, this.minIndex],
+                ["#10B981", "#9333EA"]
+              );
+              document.getElementById("stepInfo").textContent = `Pass ${
+                this.currentI + 1
+              }: New minimum found at ${this.minIndex}`;
+              this.currentJ++;
+              this.stepPhase = "inner";
+              break;
+            case "swap":
+              // Highlight swap (line 6)
               this.highlightPseudocode(5);
-              this.highlightBars([this.currentI, this.minIndex], "#EF4444");
-              
-              document.getElementById("stepInfo").textContent = 
-                `Pass ${this.currentI + 1}: Swapping elements at ${this.currentI} and ${this.minIndex}`;
-
-              [this.array[this.currentI], this.array[this.minIndex]] = [this.array[this.minIndex], this.array[this.currentI]];
-              this.swapBars(this.currentI, this.minIndex);
-              this.swaps++;
-            }
-
-            this.highlightBars([this.currentI], "#10B981");
-            this.currentI++;
-            this.passes = this.currentI;
-            this.minIndex = this.currentI;
-            this.currentJ = this.currentI + 1;
-            this.updatePerformanceMetrics();
+              if (this.minIndex !== this.currentI) {
+                this.highlightBars([this.currentI, this.minIndex], "#EF4444");
+                document.getElementById("stepInfo").textContent = `Pass ${
+                  this.currentI + 1
+                }: Swapping elements at ${this.currentI} and ${this.minIndex}`;
+                [this.array[this.currentI], this.array[this.minIndex]] = [
+                  this.array[this.minIndex],
+                  this.array[this.currentI],
+                ];
+                await this.swapBars(this.currentI, this.minIndex);
+                this.swaps++;
+              } else {
+                document.getElementById("stepInfo").textContent = `Pass ${
+                  this.currentI + 1
+                }: Element already in correct position`;
+              }
+              this.highlightBars([this.currentI], "#10B981");
+              this.currentI++;
+              this.passes = this.currentI;
+              this.minIndex = this.currentI;
+              this.currentJ = this.currentI + 1;
+              this.updatePerformanceMetrics();
+              this.stepPhase = "outer";
+              break;
           }
         }
 
         pauseAnimation() {
           this.isPaused = true;
+          this.stepMode = true; // Allow stepping after pause
           const sortBtn = document.getElementById("sortBtn");
-          sortBtn.innerHTML = "▶ Resume";
-          document.getElementById("stepInfo").textContent = "Paused - Click Resume to continue";
+          sortBtn.innerHTML = "▶ Play";
+          const stepBtn = document.getElementById("stepBtn");
+          if (stepBtn) {
+            stepBtn.disabled = false;
+            stepBtn.innerHTML = "⏭ Next";
+          }
+          document.getElementById("stepInfo").textContent =
+            "Paused - Click Play to continue or Step to advance manually";
         }
 
         resumeAnimation() {
           this.isPaused = false;
+          this.stepMode = false;
           const sortBtn = document.getElementById("sortBtn");
           sortBtn.innerHTML = "⏸ Pause";
+          const stepBtn = document.getElementById("stepBtn");
+          if (stepBtn) {
+            stepBtn.disabled = true;
+            stepBtn.innerHTML = "⏭ Step";
+          }
           document.getElementById("stepInfo").textContent = "Sorting...";
           this.selectionSortAnimation();
         }
@@ -725,14 +890,20 @@
 
         updatePerformanceMetrics() {
           const n = this.array.length;
-          const currentTime = this.startTime > 0 ? (performance.now() - this.startTime).toFixed(2) : 0;
+          const currentTime =
+            this.startTime > 0
+              ? (performance.now() - this.startTime).toFixed(2)
+              : 0;
           const comparisons = (n * (n - 1)) / 2;
 
           document.getElementById("currentSize").textContent = n;
           document.getElementById("comparisons").textContent = this.comparisons;
           document.getElementById("swaps").textContent = this.swaps;
-          document.getElementById("actualTime").textContent = currentTime + " ms";
-          document.getElementById("theoreticalTime").textContent = `${comparisons} comparisons`;
+          document.getElementById("actualTime").textContent =
+            currentTime + " ms";
+          document.getElementById(
+            "theoreticalTime"
+          ).textContent = `${comparisons} comparisons`;
           document.getElementById("passes").textContent = this.passes;
         }
 
@@ -741,7 +912,9 @@
         }
 
         initializeChart() {
-          const ctx = document.getElementById("complexityChart").getContext("2d");
+          const ctx = document
+            .getElementById("complexityChart")
+            .getContext("2d");
           const sizes = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
 
           new Chart(ctx, {
@@ -750,14 +923,37 @@
               labels: sizes,
               datasets: [
                 {
-                  label: "All Cases O(n²)",
+                  label: "Comparisons O(n²) - All Cases",
                   data: sizes.map((n) => (n * (n - 1)) / 2),
                   borderColor: "#EF4444",
                   backgroundColor: "rgba(239, 68, 68, 0.1)",
                   tension: 0.1,
                   pointRadius: 3,
                   borderWidth: 2,
-                }
+                  yAxisID: "y",
+                },
+                {
+                  label: "Swaps O(n) - Worst/Avg",
+                  data: sizes.map((n) => n - 1),
+                  borderColor: "#F59E0B",
+                  backgroundColor: "rgba(245, 158, 11, 0.1)",
+                  tension: 0.1,
+                  pointRadius: 3,
+                  borderWidth: 2,
+                  borderDash: [5, 5],
+                  yAxisID: "y",
+                },
+                {
+                  label: "Swaps - Best Case (0)",
+                  data: sizes.map((n) => 0),
+                  borderColor: "#10B981",
+                  backgroundColor: "rgba(16, 185, 129, 0.1)",
+                  tension: 0.1,
+                  pointRadius: 3,
+                  borderWidth: 2,
+                  borderDash: [5, 5],
+                  yAxisID: "y",
+                },
               ],
             },
             options: {
@@ -782,6 +978,11 @@
                 legend: {
                   display: true,
                   position: "top",
+                  labels: {
+                    font: {
+                      size: 10,
+                    },
+                  },
                 },
               },
             },

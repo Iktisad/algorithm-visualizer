@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bubble Sort</title>
+    <title>Insertion Sort</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
@@ -82,13 +82,13 @@
                 clip-rule="evenodd"
               ></path>
             </svg>
-            <span class="ml-2 font-medium text-gray-900">Bubble Sort</span>
+            <span class="ml-2 font-medium text-gray-900">Insertion Sort</span>
           </li>
         </ol>
       </nav>
 
       <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">
-        Bubble Sort
+        Insertion Sort
       </h1>
 
       <!-- Bento Grid Layout -->
@@ -98,18 +98,26 @@
           <h2 class="text-xl font-bold mb-4 text-gray-800">Pseudocode</h2>
           <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm">
             <div id="line1" class="py-2 px-3 rounded transition-colors">
-              <span class="text-purple-600">for</span> i = 0
-              <span class="text-purple-600">to</span> n-2:
+              <span class="text-purple-600">for</span> i = 1
+              <span class="text-purple-600">to</span> n-1:
             </div>
             <div id="line2" class="py-2 px-3 rounded transition-colors ml-4">
-              <span class="text-purple-600">for</span> j = 0
-              <span class="text-purple-600">to</span> n-2-i:
+              key = array[i]
             </div>
-            <div id="line3" class="py-2 px-3 rounded transition-colors ml-8">
-              <span class="text-purple-600">if</span> array[j] > array[j+1]:
+            <div id="line3" class="py-2 px-3 rounded transition-colors ml-4">
+              j = i - 1
             </div>
-            <div id="line4" class="py-2 px-3 rounded transition-colors ml-12">
-              <span class="text-blue-600">swap</span>(array[j], array[j+1])
+            <div id="line4" class="py-2 px-3 rounded transition-colors ml-4">
+              <span class="text-purple-600">while</span> j >= 0 <span class="text-purple-600">and</span> array[j] > key:
+            </div>
+            <div id="line5" class="py-2 px-3 rounded transition-colors ml-8">
+              array[j+1] = array[j]
+            </div>
+            <div id="line6" class="py-2 px-3 rounded transition-colors ml-8">
+              j = j - 1
+            </div>
+            <div id="line7" class="py-2 px-3 rounded transition-colors ml-4">
+              array[j+1] = key
             </div>
           </div>
           <div class="mt-4 text-sm text-gray-600">
@@ -118,8 +126,7 @@
               algorithm is executing.
             </p>
             <p class="text-xs">
-              The outer loop controls passes through the array, while the inner
-              loop compares adjacent elements.
+              Insertion sort builds the sorted array one element at a time by inserting each element into its correct position.
             </p>
           </div>
         </div>
@@ -127,28 +134,23 @@
         <!-- Visualization Panel -->
         <div class="md:col-span-2 bg-white rounded-lg shadow-lg p-6">
           <h2 class="text-xl font-bold mb-4 text-gray-800">
-            Bubble Sort Visualization
+            Insertion Sort Visualization
           </h2>
           <div class="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <h3 class="font-semibold text-blue-900 mb-2">
-              How Bubble Sort Works
+              How Insertion Sort Works
             </h3>
             <p class="text-sm text-blue-800">
-              Bubble Sort repeatedly compares adjacent elements and swaps them
-              if they are in the wrong order. The largest element "bubbles up"
-              to its correct position after each pass. This continues until the
-              array is fully sorted. Watch the
-              <span class="font-semibold text-amber-600">yellow bars</span>
-              being compared,
-              <span class="font-semibold text-red-600">red bars</span> being
-              swapped, and
-              <span class="font-semibold text-green-600">green bars</span>
-              showing sorted elements.
+              Insertion Sort builds the sorted array one item at a time. It takes each element and inserts it into its correct position in the already sorted portion. Watch the
+              <span class="font-semibold text-purple-600">purple bar</span> (key element being inserted),
+              <span class="font-semibold text-amber-600">yellow bars</span> (elements being compared),
+              <span class="font-semibold text-cyan-600">cyan bars</span> (elements being shifted), and
+              <span class="font-semibold text-green-600">green bars</span> showing sorted elements.
             </p>
           </div>
           <div
             id="arrayContainer"
-            class="bar-container min-h-64 flex items-end justify-start space-x-1 border-2 border-gray-200 rounded p-4"
+            class="bar-container min-h-64 flex items-end justify-start space-x-1 border-2 border-gray-200 rounded p-4 bg-gray-50"
           >
             <div class="text-gray-500 m-auto">
               Click "Generate Array" to start
@@ -170,7 +172,7 @@
                 value="20"
                 class="w-20"
               />
-              <span class="text-sm w-8">20</span>
+              <span id="sizeDisplay" class="text-sm w-8">20</span>
             </div>
 
             <div class="flex items-center gap-2">
@@ -246,15 +248,15 @@
               <span id="comparisons" class="text-sm">0</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-sm font-medium">Swaps:</span>
-              <span id="swaps" class="text-sm">0</span>
+              <span class="text-sm font-medium">Shifts:</span>
+              <span id="shifts" class="text-sm">0</span>
             </div>
             <div class="flex justify-between">
               <span class="text-sm font-medium">Actual Time:</span>
               <span id="actualTime" class="text-sm">-</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-sm font-medium">Theoretical (n²):</span>
+              <span class="text-sm font-medium">Theoretical:</span>
               <span id="theoreticalTime" class="text-sm">-</span>
             </div>
             <div class="flex justify-between">
@@ -277,64 +279,75 @@
     </div>
 
     <script>
-      class BubbleSortVisualizer {
+      class InsertionSortVisualizer {
         constructor() {
           this.array = [];
           this.originalArray = [];
           this.isAnimating = false;
           this.isPaused = false;
           this.animationSpeed = 500;
-          this.currentI = 0;
+          this.currentI = 1;
           this.currentJ = 0;
+          this.key = null;
           this.comparisons = 0;
-          this.swaps = 0;
+          this.shifts = 0;
           this.passes = 0;
           this.startTime = 0;
           this.stepMode = false;
-          this.animationFrame = null;
+          this.stepPhase = null;
 
           this.initializeEventListeners();
           this.initializeChart();
-          this.generateArray(); // Generate initial array
+          this.generateArray();
         }
 
         initializeEventListeners() {
-          document
-            .getElementById("generateBtn")
-            .addEventListener("click", () => this.generateArray());
-          document
-            .getElementById("sortBtn")
-            .addEventListener("click", () => this.togglePlayPause());
-          document
-            .getElementById("stepBtn")
-            .addEventListener("click", () => this.startStepMode());
-          document
-            .getElementById("resetBtn")
-            .addEventListener("click", () => this.reset());
+          document.getElementById("generateBtn").addEventListener("click", () => this.generateArray());
+          document.getElementById("sortBtn").addEventListener("click", () => this.togglePlayPause());
+          document.getElementById("stepBtn").addEventListener("click", () => this.startStepMode());
+          document.getElementById("resetBtn").addEventListener("click", () => this.reset());
           document.getElementById("speed").addEventListener("input", (e) => {
             this.animationSpeed = 1100 - parseInt(e.target.value) * 100;
           });
 
-          // Update size display when slider changes
           const arraySizeSlider = document.getElementById("arraySize");
-          const arraySizeDisplay = arraySizeSlider.nextElementSibling;
+          const arraySizeDisplay = document.getElementById("sizeDisplay");
           arraySizeSlider.addEventListener("input", (e) => {
             arraySizeDisplay.textContent = e.target.value;
           });
         }
 
         generateArray() {
-          const size = Math.min(
-            120,
-            Math.max(5, parseInt(document.getElementById("arraySize").value))
-          );
+          const size = Math.min(120, Math.max(5, parseInt(document.getElementById("arraySize").value)));
           document.getElementById("arraySize").value = size;
+
+          this.isAnimating = false;
+          this.isPaused = false;
+          this.stepMode = false;
+          this.currentI = 1;
+          this.currentJ = 0;
+          this.key = null;
+          this.stepPhase = null;
+
+          const sortBtn = document.getElementById("sortBtn");
+          const stepBtn = document.getElementById("stepBtn");
+          if (sortBtn) {
+            sortBtn.innerHTML = "▶ Play";
+            sortBtn.disabled = false;
+          }
+          if (stepBtn) {
+            stepBtn.disabled = false;
+            stepBtn.innerHTML = "⏭ Step";
+          }
+
           this.array = Array.from({ length: size }, (_, i) => i + 1);
           this.originalArray = [...this.array];
           this.shuffleArray();
           this.renderArray();
           this.resetMetrics();
           this.updatePerformanceMetrics();
+          this.highlightPseudocode(null);
+          document.getElementById("stepInfo").textContent = "Ready to sort";
         }
 
         shuffleArray() {
@@ -348,22 +361,17 @@
           const container = document.getElementById("arrayContainer");
           const n = this.array.length;
 
-          // Clear container efficiently
           container.innerHTML = "";
 
           if (n === 0) {
-            container.innerHTML =
-              '<div class="text-gray-500 m-auto">Click "New Array" to start</div>';
+            container.innerHTML = '<div class="text-gray-500 m-auto">Click "Generate Array" to start</div>';
             return;
           }
 
           const maxValue = Math.max(...this.array);
           const containerWidth = container.clientWidth - 32;
 
-          // Adaptive bar width based on array size
-          let barWidth;
-          let fontSize;
-          let showLabels = true;
+          let barWidth, fontSize, showLabels = true;
 
           if (n <= 20) {
             barWidth = Math.max(20, Math.min(40, containerWidth / n - 4));
@@ -380,7 +388,6 @@
             showLabels = false;
           }
 
-          // Create document fragment for better performance
           const fragment = document.createDocumentFragment();
 
           this.array.forEach((value, index) => {
@@ -416,12 +423,16 @@
           container.appendChild(fragment);
         }
 
-        highlightBars(indices, color) {
+        highlightBars(indices, colors) {
           const bars = document.querySelectorAll(".bar");
           bars.forEach((bar, index) => {
-            if (indices.includes(index)) {
-              bar.style.backgroundColor = color;
+            const colorMap = new Map(indices.map((idx, i) => [idx, Array.isArray(colors) ? colors[i] : colors]));
+            if (colorMap.has(index)) {
+              bar.style.backgroundColor = colorMap.get(index);
               bar.style.transform = "scale(1.05)";
+            } else if (index < this.currentI) {
+              bar.style.backgroundColor = "#10B981";
+              bar.style.transform = "scale(1)";
             } else {
               bar.style.backgroundColor = "#3B82F6";
               bar.style.transform = "scale(1)";
@@ -429,56 +440,33 @@
           });
         }
 
-        async swapBars(i, j) {
+        async shiftElement(from, to) {
           return new Promise((resolve) => {
             const bars = document.querySelectorAll(".bar");
-            if (!bars[i] || !bars[j]) {
+            if (!bars[from]) {
               resolve();
               return;
             }
 
-            const bar1 = bars[i];
-            const bar2 = bars[j];
+            const bar = bars[from];
+            const barWidth = bar.offsetWidth + 2;
+            const distance = (to - from) * barWidth;
 
-            // Get bar widths for smooth swap animation
-            const barWidth = bar1.offsetWidth + 2;
-
-            // Visual swap animation
-            bar1.style.transform = `translateX(${
-              (j - i) * barWidth
-            }px) scale(1.05)`;
-            bar2.style.transform = `translateX(${
-              (i - j) * barWidth
-            }px) scale(1.05)`;
+            bar.style.transform = `translateX(${distance}px) scale(1.05)`;
 
             setTimeout(() => {
-              // Swap in DOM
-              const parent = bar1.parentNode;
-              const nextSibling1 = bar1.nextSibling;
-              const nextSibling2 = bar2.nextSibling;
-
-              if (nextSibling1 === bar2) {
-                parent.insertBefore(bar2, bar1);
-              } else if (nextSibling2 === bar1) {
-                parent.insertBefore(bar1, bar2);
-              } else {
-                const temp = document.createElement("div");
-                parent.insertBefore(temp, bar1);
-                parent.insertBefore(bar1, bar2);
-                parent.insertBefore(bar2, temp);
-                parent.removeChild(temp);
-              }
-
-              // Reset transforms
-              bar1.style.transform = "scale(1)";
-              bar2.style.transform = "scale(1)";
-
+              bar.style.transform = "scale(1)";
               resolve();
             }, 200);
           });
         }
 
         togglePlayPause() {
+          if (this.stepMode && !this.isAnimating) {
+            this.reset();
+            return;
+          }
+
           if (this.isAnimating && !this.stepMode && !this.isPaused) {
             this.pauseAnimation();
           } else if (this.isPaused) {
@@ -491,31 +479,99 @@
         async startAutoSort() {
           if (this.isAnimating) return;
 
+          if (!this.isPaused) {
+            this.currentI = 1;
+            this.currentJ = 0;
+            this.key = null;
+            this.resetMetrics();
+          }
+
           this.isAnimating = true;
           this.stepMode = false;
-          this.startTime = performance.now();
+          if (this.startTime === 0) {
+            this.startTime = performance.now();
+          }
 
           const sortBtn = document.getElementById("sortBtn");
           sortBtn.innerHTML = "⏸ Pause";
           const stepBtn = document.getElementById("stepBtn");
           if (stepBtn) stepBtn.disabled = true;
 
-          await this.bubbleSortAnimation();
+          await this.insertionSortAnimation();
 
-          // Only finalize if we completed without being paused
           if (!this.isPaused) {
             this.isAnimating = false;
             sortBtn.innerHTML = "▶ Play";
             if (stepBtn) stepBtn.disabled = false;
 
-            this.highlightBars(
-              Array.from({ length: this.array.length }, (_, i) => i),
-              "#10B981"
-            );
+            this.highlightBars(Array.from({ length: this.array.length }, (_, i) => i), "#10B981");
             this.highlightPseudocode(null);
-            document.getElementById("stepInfo").textContent =
-              "Sorting completed!";
+            document.getElementById("stepInfo").textContent = "Sorting completed!";
           }
+        }
+
+        async insertionSortAnimation() {
+          const n = this.array.length;
+
+          for (let i = this.currentI; i < n && !this.isPaused; i++) {
+            this.currentI = i;
+            this.passes = i;
+
+            this.highlightPseudocode(0);
+            this.highlightBars([i], "#9333EA");
+            document.getElementById("stepInfo").textContent = `Pass ${i}: Examining element at position ${i}`;
+            await this.delay(this.animationSpeed);
+
+            this.key = this.array[i];
+            this.highlightPseudocode(1);
+            document.getElementById("stepInfo").textContent = `Pass ${i}: Key = ${this.key}`;
+            await this.delay(this.animationSpeed);
+
+            this.currentJ = i - 1;
+            this.highlightPseudocode(2);
+            await this.delay(this.animationSpeed / 2);
+
+            this.highlightPseudocode(3);
+            while (this.currentJ >= 0 && this.array[this.currentJ] > this.key && !this.isPaused) {
+              this.comparisons++;
+              
+              this.highlightBars([this.currentJ, i], ["#F59E0B", "#9333EA"]);
+              document.getElementById("stepInfo").textContent = 
+                `Pass ${i}: Comparing ${this.array[this.currentJ]} > ${this.key}, shifting right`;
+              await this.delay(this.animationSpeed);
+
+              this.highlightPseudocode(4);
+              this.array[this.currentJ + 1] = this.array[this.currentJ];
+              this.shifts++;
+              await this.shiftElement(this.currentJ, this.currentJ + 1);
+              this.renderArray();
+              this.highlightBars([this.currentJ + 1, i], ["#06B6D4", "#9333EA"]);
+              await this.delay(this.animationSpeed / 2);
+
+              this.highlightPseudocode(5);
+              this.currentJ--;
+              await this.delay(this.animationSpeed / 2);
+
+              this.highlightPseudocode(3);
+              this.updatePerformanceMetrics();
+            }
+
+            if (this.currentJ >= 0) {
+              this.comparisons++;
+            }
+
+            this.highlightPseudocode(6);
+            this.array[this.currentJ + 1] = this.key;
+            this.renderArray();
+            this.highlightBars([this.currentJ + 1], "#10B981");
+            document.getElementById("stepInfo").textContent = 
+              `Pass ${i}: Inserted ${this.key} at position ${this.currentJ + 1}`;
+            await this.delay(this.animationSpeed);
+
+            this.updatePerformanceMetrics();
+          }
+
+          this.highlightPseudocode(null);
         }
 
         startStepMode() {
@@ -524,104 +580,32 @@
           if (!this.stepMode) {
             this.stepMode = true;
             this.isAnimating = true;
-            this.startTime = performance.now();
+            this.isPaused = false;
+            if (this.startTime === 0) {
+              this.startTime = performance.now();
+            }
+            if (this.currentI === 1 && !this.stepPhase) {
+              this.currentI = 1;
+              this.currentJ = 0;
+              this.key = null;
+            }
             const stepBtn = document.getElementById("stepBtn");
             if (stepBtn) stepBtn.innerHTML = "⏭ Next";
             const sortBtn = document.getElementById("sortBtn");
             if (sortBtn) sortBtn.disabled = true;
           }
 
-          this.bubbleSortStep();
+          this.insertionSortStep();
         }
 
-        async bubbleSortAnimation() {
+        async insertionSortStep() {
           const n = this.array.length;
-          let worstCaseFlag = true; // Track if we're following worst-case path
+          if (!this.stepPhase) this.stepPhase = "outer";
 
-          for (let i = this.currentI; i < n - 1 && !this.isPaused; i++) {
-            this.currentI = i;
-            this.passes = i + 1;
-            let swapped = false;
-
-            // Highlight outer loop pseudocode
-            this.highlightPseudocode(0);
-
-            for (let j = this.currentJ; j < n - 1 - i && !this.isPaused; j++) {
-              this.currentJ = j;
-              this.comparisons++;
-
-              // Highlight inner loop pseudocode
-              this.highlightPseudocode(1);
-
-              // Highlight current comparison
-              this.highlightBars([j, j + 1], "#F59E0B");
-              document.getElementById("stepInfo").textContent = `Pass ${
-                i + 1
-              }: Comparing elements at positions ${j} and ${j + 1}`;
-
-              this.updatePerformanceMetrics();
-
-              await this.delay(this.animationSpeed);
-
-              // Highlight comparison condition pseudocode before evaluating
-              this.highlightPseudocode(2);
-
-              // Brief delay to show the comparison highlight
-              await this.delay(this.animationSpeed / 3);
-
-              if (this.isPaused) return; // Exit if paused during delay
-
-              if (this.array[j] > this.array[j + 1]) {
-                // Highlight for swap
-                this.highlightBars([j, j + 1], "#EF4444");
-
-                [this.array[j], this.array[j + 1]] = [
-                  this.array[j + 1],
-                  this.array[j],
-                ];
-
-                // Highlight swap pseudocode
-                this.highlightPseudocode(3);
-
-                await this.swapBars(j, j + 1);
-                this.swaps++;
-                swapped = true;
-
-                // Brief delay to show swap pseudocode
-                await this.delay(this.animationSpeed / 2);
-
-                if (this.isPaused) return; // Exit if paused during swap
-
-                document.getElementById("stepInfo").textContent = `Pass ${
-                  i + 1
-                }: Swapped elements at positions ${j} and ${j + 1}`;
-              }
-
-              this.updatePerformanceMetrics();
-            }
-
-            // Highlight sorted portion
-            this.highlightBars([n - 1 - i], "#10B981");
-
-            // Reset currentJ for next iteration
-            this.currentJ = 0;
-
-            if (!swapped) {
-              worstCaseFlag = false; // Early exit means not worst case
-              break;
-            }
-          }
-
-          // Update metrics with case determination
-          this.updatePerformanceMetrics(worstCaseFlag);
-
-          // Clear pseudocode highlighting when done
-          this.highlightPseudocode(null);
-        }
-
-        bubbleSortStep() {
-          if (this.currentI >= this.array.length - 1) {
+          if (this.currentI >= n) {
             this.isAnimating = false;
+            this.stepMode = false;
+            this.stepPhase = null;
             const stepBtn = document.getElementById("stepBtn");
             const sortBtn = document.getElementById("sortBtn");
             if (stepBtn) {
@@ -629,83 +613,119 @@
               stepBtn.disabled = true;
             }
             if (sortBtn) sortBtn.disabled = false;
-            this.highlightBars(
-              Array.from({ length: this.array.length }, (_, i) => i),
-              "#10B981"
-            );
+            this.highlightBars(Array.from({ length: n }, (_, i) => i), "#10B981");
             this.highlightPseudocode(null);
-            document.getElementById("stepInfo").textContent =
-              "Sorting completed!";
+            document.getElementById("stepInfo").textContent = "Sorting completed!";
             return;
           }
 
-          const n = this.array.length;
+          switch (this.stepPhase) {
+            case "outer":
+              this.highlightPseudocode(0);
+              this.highlightBars([this.currentI], "#9333EA");
+              document.getElementById("stepInfo").textContent = 
+                `Pass ${this.currentI}: Examining element at position ${this.currentI}`;
+              this.stepPhase = "key";
+              break;
 
-          if (this.currentJ < n - 1 - this.currentI) {
-            this.comparisons++;
+            case "key":
+              this.key = this.array[this.currentI];
+              this.highlightPseudocode(1);
+              document.getElementById("stepInfo").textContent = 
+                `Pass ${this.currentI}: Key = ${this.key}`;
+              this.stepPhase = "setJ";
+              break;
 
-            // Highlight inner loop
-            this.highlightPseudocode(1);
-
-            this.highlightBars([this.currentJ, this.currentJ + 1], "#F59E0B");
-            document.getElementById("stepInfo").textContent = `Pass ${
-              this.currentI + 1
-            }: Comparing elements at positions ${this.currentJ} and ${
-              this.currentJ + 1
-            }`;
-
-            if (this.array[this.currentJ] > this.array[this.currentJ + 1]) {
+            case "setJ":
+              this.currentJ = this.currentI - 1;
               this.highlightPseudocode(2);
-              this.highlightBars([this.currentJ, this.currentJ + 1], "#EF4444");
+              document.getElementById("stepInfo").textContent = 
+                `Pass ${this.currentI}: Set j = ${this.currentJ}`;
+              this.stepPhase = "while";
+              break;
 
-              setTimeout(() => {
-                this.highlightPseudocode(3);
-              }, 100);
+            case "while":
+              this.highlightPseudocode(3);
+              if (this.currentJ >= 0 && this.array[this.currentJ] > this.key) {
+                this.comparisons++;
+                this.highlightBars([this.currentJ, this.currentI], ["#F59E0B", "#9333EA"]);
+                document.getElementById("stepInfo").textContent = 
+                  `Pass ${this.currentI}: ${this.array[this.currentJ]} > ${this.key}, will shift`;
+                this.stepPhase = "shift";
+              } else {
+                if (this.currentJ >= 0) this.comparisons++;
+                this.stepPhase = "insert";
+              }
+              this.updatePerformanceMetrics();
+              break;
 
-              [this.array[this.currentJ], this.array[this.currentJ + 1]] = [
-                this.array[this.currentJ + 1],
-                this.array[this.currentJ],
-              ];
-              this.swapBars(this.currentJ, this.currentJ + 1);
-              this.swaps++;
+            case "shift":
+              this.highlightPseudocode(4);
+              this.array[this.currentJ + 1] = this.array[this.currentJ];
+              this.shifts++;
+              await this.shiftElement(this.currentJ, this.currentJ + 1);
+              this.renderArray();
+              this.highlightBars([this.currentJ + 1], "#06B6D4");
+              document.getElementById("stepInfo").textContent = 
+                `Pass ${this.currentI}: Shifted element to position ${this.currentJ + 1}`;
+              this.stepPhase = "decJ";
+              this.updatePerformanceMetrics();
+              break;
 
-              document.getElementById("stepInfo").textContent = `Pass ${
-                this.currentI + 1
-              }: Swapped elements at positions ${this.currentJ} and ${
-                this.currentJ + 1
-              }`;
-            }
+            case "decJ":
+              this.highlightPseudocode(5);
+              this.currentJ--;
+              document.getElementById("stepInfo").textContent = 
+                `Pass ${this.currentI}: Decremented j to ${this.currentJ}`;
+              this.stepPhase = "while";
+              break;
 
-            this.currentJ++;
-          } else {
-            this.highlightBars([n - 1 - this.currentI], "#10B981");
-            this.highlightPseudocode(0);
-            this.currentI++;
-            this.passes = this.currentI;
-            this.currentJ = 0;
+            case "insert":
+              this.highlightPseudocode(6);
+              this.array[this.currentJ + 1] = this.key;
+              this.renderArray();
+              this.highlightBars([this.currentJ + 1], "#10B981");
+              document.getElementById("stepInfo").textContent = 
+                `Pass ${this.currentI}: Inserted ${this.key} at position ${this.currentJ + 1}`;
+              this.currentI++;
+              this.passes = this.currentI - 1;
+              this.stepPhase = "outer";
+              this.updatePerformanceMetrics();
+              break;
           }
-
-          this.updatePerformanceMetrics();
         }
 
         pauseAnimation() {
           this.isPaused = true;
+          this.stepMode = true;
           const sortBtn = document.getElementById("sortBtn");
-          sortBtn.innerHTML = "▶ Resume";
-          document.getElementById("stepInfo").textContent =
-            "Paused - Click Resume to continue";
+          sortBtn.innerHTML = "▶ Play";
+          const stepBtn = document.getElementById("stepBtn");
+          if (stepBtn) {
+            stepBtn.disabled = false;
+            stepBtn.innerHTML = "⏭ Next";
+          }
+          document.getElementById("stepInfo").textContent = 
+            "Paused - Click Play to continue or Step to advance manually";
         }
 
         resumeAnimation() {
           this.isPaused = false;
+          this.stepMode = false;
+          this.stepPhase = null;
           const sortBtn = document.getElementById("sortBtn");
           sortBtn.innerHTML = "⏸ Pause";
+          const stepBtn = document.getElementById("stepBtn");
+          if (stepBtn) {
+            stepBtn.disabled = true;
+            stepBtn.innerHTML = "⏭ Step";
+          }
           document.getElementById("stepInfo").textContent = "Sorting...";
-          this.bubbleSortAnimation();
+          this.insertionSortAnimation();
         }
 
         highlightPseudocode(lineNumber) {
-          const lines = ["line1", "line2", "line3", "line4"];
+          const lines = ["line1", "line2", "line3", "line4", "line5", "line6", "line7"];
           lines.forEach((lineId, index) => {
             const element = document.getElementById(lineId);
             if (element) {
@@ -722,8 +742,10 @@
           this.isAnimating = false;
           this.isPaused = false;
           this.stepMode = false;
-          this.currentI = 0;
+          this.currentI = 1;
           this.currentJ = 0;
+          this.key = null;
+          this.stepPhase = null;
 
           const sortBtn = document.getElementById("sortBtn");
           const stepBtn = document.getElementById("stepBtn");
@@ -752,40 +774,23 @@
 
         resetMetrics() {
           this.comparisons = 0;
-          this.swaps = 0;
+          this.shifts = 0;
           this.passes = 0;
           this.startTime = 0;
         }
 
-        updatePerformanceMetrics(worstCaseFlag = null) {
+        updatePerformanceMetrics() {
           const n = this.array.length;
-          const currentTime =
-            this.startTime > 0
-              ? (performance.now() - this.startTime).toFixed(2)
-              : 0;
-          const worstCaseOps = (n * (n - 1)) / 2;
-          const bestCaseOps = n - 1;
-          const avgCaseOps = Math.floor((n * (n - 1)) / 4);
+          const currentTime = this.startTime > 0 ? (performance.now() - this.startTime).toFixed(2) : 0;
+          const worstComparisons = (n * (n - 1)) / 2;
+          const bestComparisons = n - 1;
 
           document.getElementById("currentSize").textContent = n;
           document.getElementById("comparisons").textContent = this.comparisons;
-          document.getElementById("swaps").textContent = this.swaps;
-          document.getElementById("actualTime").textContent =
-            currentTime + " ms";
-
-          // Determine which case we're in
-          let caseType = "";
-          if (worstCaseFlag !== null) {
-            if (worstCaseFlag) {
-              caseType = " (Worst Case)";
-            } else {
-              caseType = this.passes === 1 ? " (Best Case)" : " (Average Case)";
-            }
-          }
-
-          document.getElementById(
-            "theoreticalTime"
-          ).textContent = `Best: ${bestCaseOps}, Avg: ~${avgCaseOps}, Worst: ${worstCaseOps}${caseType}`;
+          document.getElementById("shifts").textContent = this.shifts;
+          document.getElementById("actualTime").textContent = currentTime + " ms";
+          document.getElementById("theoreticalTime").textContent = 
+            `Best: ${bestComparisons}, Worst: ${worstComparisons}`;
           document.getElementById("passes").textContent = this.passes;
         }
 
@@ -794,9 +799,7 @@
         }
 
         initializeChart() {
-          const ctx = document
-            .getElementById("complexityChart")
-            .getContext("2d");
+          const ctx = document.getElementById("complexityChart").getContext("2d");
           const sizes = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
 
           new Chart(ctx, {
@@ -855,6 +858,11 @@
                 legend: {
                   display: true,
                   position: "top",
+                  labels: {
+                    font: {
+                      size: 10,
+                    },
+                  },
                 },
               },
             },
@@ -862,8 +870,7 @@
         }
       }
 
-      // Initialize the visualizer
-      const visualizer = new BubbleSortVisualizer();
+      const visualizer = new InsertionSortVisualizer();
     </script>
   </body>
 </html>

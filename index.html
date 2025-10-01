@@ -1,241 +1,581 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Algorithms Lab</title>
-    <meta
-      name="description"
-      content="A small landing page for algorithm visualizations — start building your own visualizers."
-    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algorithms Learning Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .category-card:hover .category-icon {
+        transform: scale(1.1);
+      }
+    </style>
   </head>
-  <body class="bg-gradient-to-b from-slate-50 to-white text-slate-800">
-    <div class="min-h-screen">
-      <header class="bg-white border-b">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center gap-4">
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-6 py-6">
+        <div class="flex items-center gap-4">
           <div
-            class="w-12 h-12 bg-indigo-600 text-white rounded-md flex items-center justify-center font-bold text-xl"
+            class="w-12 h-12 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xl"
           >
-            A
+            AL
           </div>
           <div>
-            <h1 class="text-xl font-extrabold">Algorithms Lab</h1>
-            <p class="text-xs text-slate-500">
-              Visualize, learn, and experiment with algorithms.
-            </p>
+            <h1 class="text-3xl font-bold text-gray-900">Algorithms Lab</h1>
           </div>
         </div>
-      </header>
-
-      <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-12 gap-6">
-        <!-- Sidebar: file tree -->
-        <aside class="col-span-12 lg:col-span-4 xl:col-span-2">
-          <div class="sticky top-6">
-            <div class="bg-white rounded-lg shadow p-4">
-              <div class="flex items-center justify-between mb-3">
-                <h2 class="text-sm font-semibold">Project</h2>
-                <button
-                  id="collapseAll"
-                  class="text-xs text-slate-500 hover:underline"
-                >
-                  Collapse
-                </button>
-              </div>
-
-              <nav aria-label="File tree">
-                <ul class="space-y-2 text-sm text-slate-700">
-                  <li>
-                    <button
-                      class="folder-toggle w-full flex items-center justify-between p-2 rounded hover:bg-slate-50"
-                      aria-expanded="false"
-                    >
-                      <span class="flex items-center gap-2"> 📁 Sorting </span>
-                      <svg
-                        class="chev w-4 h-4 text-slate-400 transform transition-transform"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-                    <ul class="ml-3 mt-2 hidden space-y-1 file-list">
-                      <li>
-                        <a
-                          class="block p-2 rounded hover:bg-slate-50"
-                          href="./sorting/bubble-sort.html"
-                          >bubble sort</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          class="block p-2 rounded hover:bg-slate-50"
-                          href="./sorting/selection-sort.html"
-                          >selection sort</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li>
-                    <button
-                      class="folder-toggle w-full flex items-center justify-between p-2 rounded hover:bg-slate-50"
-                      aria-expanded="false"
-                    >
-                      <span class="flex items-center gap-2"> 📁 Graphs </span>
-                      <svg
-                        class="chev w-4 h-4 text-slate-400 transform transition-transform"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-                    <ul class="ml-3 mt-2 hidden space-y-1 file-list">
-                      <li>
-                        <a
-                          class="block p-2 rounded hover:bg-slate-50"
-                          href="./graphs/index.html"
-                          >index.html</a
-                        >
-                      </li>
-                      <li>
-                        <a
-                          class="block p-2 rounded hover:bg-slate-50"
-                          href="./graphs/bfs.html"
-                          >bfs.html</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li>
-                    <button
-                      class="folder-toggle w-full flex items-center justify-between p-2 rounded hover:bg-slate-50"
-                      aria-expanded="false"
-                    >
-                      <span class="flex items-center gap-2">
-                        📁 Data Structure
-                      </span>
-                      <svg
-                        class="chev w-4 h-4 text-slate-400 transform transition-transform"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-                    <ul class="ml-3 mt-2 hidden space-y-1 file-list">
-                      <li>
-                        <a class="block p-2 rounded hover:bg-slate-50" href="#"
-                          >stacks.html</a
-                        >
-                      </li>
-                      <li>
-                        <a class="block p-2 rounded hover:bg-slate-50" href="#"
-                          >queues.html</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </aside>
-
-        <!-- Main content -->
-        <section class="col-span-12 lg:col-span-8 xl:col-span-10">
-          <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-2xl font-extrabold text-slate-900">
-              Build interactive visualizations for algorithms
-            </h2>
-            <p class="mt-3 text-slate-600">
-              Start with sorting, then add graph algorithms, pathfinding, data
-              structures, and more. This is your canvas — build the
-              visualizations you want. Use the file tree on the left to organize
-              topics and open specific visualizers.
-            </p>
-
-            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="rounded-lg border p-4">
-                <h4 class="font-semibold">Quick start</h4>
-                <p class="text-sm text-slate-600 mt-2">
-                  Create a folder per topic and add an
-                  <code>index.html</code> inside. Link to Tailwind via CDN to
-                  prototype fast.
-                </p>
-              </div>
-              <div class="rounded-lg border p-4">
-                <h4 class="font-semibold">Conventions</h4>
-                <p class="text-sm text-slate-600 mt-2">
-                  Name folders by topic (sorting, graphs, dp). Inside each, put
-                  example pages named after the algorithm or concept.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
+    </header>
 
-      <footer class="mt-8 py-8">
-        <div class="max-w-7xl mx-auto px-4 text-sm text-slate-500 text-center">
-          Made for exploring algorithms. Build the rest from scratch.
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <!-- Algorithms Section -->
+      <section class="mb-12">
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"
+        >
+          <span
+            class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-sm font-bold"
+            >🔄</span
+          >
+          Sorting & Searching Algorithms
+        </h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          <a
+            href="./sorting/bubble-sort.html"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🫧
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Bubble Sort</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Simple comparison-based sorting algorithm
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >O(n²)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="./sorting/selection-sort.html"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🎯
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Selection Sort</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Find minimum and swap to front
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >O(n²)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="./sorting/insertion-sort.html"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🚀
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Insertion Sort</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Builds sorted array one item at a time
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >O(n²)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🌊
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Merge Sort</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Stable divide-and-conquer sorting
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full"
+                >O(n log n)</span
+              >
+              <span class="text-xs text-orange-600 font-medium"
+                >Intermediate</span
+              >
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🔍
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Binary Search</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Efficient search in sorted arrays
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full"
+                >O(log n)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-pink-100 text-pink-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              📊
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Heap Sort</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Uses heap data structure for sorting
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full"
+                >O(n log n)</span
+              >
+              <span class="text-xs text-red-600 font-medium">Advanced</span>
+            </div>
+          </a>
         </div>
-      </footer>
+      </section>
+
+      <!-- Graph Algorithms Section -->
+      <section class="mb-12">
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"
+        >
+          <span
+            class="w-8 h-8 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-sm font-bold"
+            >🕸️</span
+          >
+          Graph Algorithms
+        </h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          <a
+            href="./graphs/bfs.html"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🌊
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">
+              Breadth-First Search
+            </h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Level-by-level graph traversal
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >O(V + E)</span
+              >
+              <span class="text-xs text-orange-600 font-medium"
+                >Intermediate</span
+              >
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🏔️
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Depth-First Search</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Deep exploration of graph paths
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >O(V + E)</span
+              >
+              <span class="text-xs text-orange-600 font-medium"
+                >Intermediate</span
+              >
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🛣️
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">
+              Dijkstra's Algorithm
+            </h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Shortest path in weighted graphs
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full"
+                >O(V²)</span
+              >
+              <span class="text-xs text-red-600 font-medium">Advanced</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🌲
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">
+              Minimum Spanning Tree
+            </h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Connect all vertices with minimum cost
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full"
+                >O(E log V)</span
+              >
+              <span class="text-xs text-red-600 font-medium">Advanced</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Data Structures Section -->
+      <section class="mb-12">
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"
+        >
+          <span
+            class="w-8 h-8 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-sm font-bold"
+            >🏗️</span
+          >
+          Data Structures
+        </h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              📚
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Stack</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Last In, First Out (LIFO) structure
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full"
+                >O(1)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🚶‍♂️
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Queue</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              First In, First Out (FIFO) structure
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full"
+                >O(1)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🌳
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Binary Tree</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Hierarchical tree data structure
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full"
+                >O(log n)</span
+              >
+              <span class="text-xs text-orange-600 font-medium"
+                >Intermediate</span
+              >
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🔗
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Linked List</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Dynamic linear data structure
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >O(n)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              #️⃣
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Hash Table</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Key-value pairs with fast lookup
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full"
+                >O(1)</span
+              >
+              <span class="text-xs text-orange-600 font-medium"
+                >Intermediate</span
+              >
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-pink-100 text-pink-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              📊
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Heap</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Complete binary tree with heap property
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full"
+                >O(log n)</span
+              >
+              <span class="text-xs text-red-600 font-medium">Advanced</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Dynamic Programming Section -->
+      <section class="mb-12">
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"
+        >
+          <span
+            class="w-8 h-8 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center text-sm font-bold"
+            >🧩</span
+          >
+          Dynamic Programming
+        </h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🐰
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Fibonacci Sequence</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Classic DP introduction problem
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >O(n)</span
+              >
+              <span class="text-xs text-blue-600 font-medium">Beginner</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              🎒
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Knapsack Problem</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Optimize value within weight constraint
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full"
+                >O(nW)</span
+              >
+              <span class="text-xs text-red-600 font-medium">Advanced</span>
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              📝
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">
+              Longest Common Subsequence
+            </h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Find longest common pattern
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full"
+                >O(mn)</span
+              >
+              <span class="text-xs text-orange-600 font-medium"
+                >Intermediate</span
+              >
+            </div>
+          </a>
+
+          <a
+            href="#"
+            class="block bg-white rounded-xl p-6 border border-gray-200 card-hover transition-all category-card"
+          >
+            <div
+              class="category-icon w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center text-2xl mb-4 transition-transform"
+            >
+              💰
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Coin Change</h3>
+            <p class="text-sm text-gray-600 mb-3">
+              Minimum coins to make amount
+            </p>
+            <div class="flex items-center justify-between">
+              <span
+                class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full"
+                >O(n*amount)</span
+              >
+              <span class="text-xs text-orange-600 font-medium"
+                >Intermediate</span
+              >
+            </div>
+          </a>
+        </div>
+      </section>
     </div>
 
-    <script>
-      // Folder toggle behavior for the file tree
-      document.querySelectorAll(".folder-toggle").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          const expanded = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!expanded));
-          const list = btn.nextElementSibling;
-          if (list && list.classList.contains("file-list")) {
-            list.classList.toggle("hidden");
-            const chev = btn.querySelector(".chev");
-            if (chev) chev.classList.toggle("rotate-180");
-          }
-        });
-      });
-
-      // Collapse all button
-      const collapseAll = document.getElementById("collapseAll");
-      if (collapseAll) {
-        collapseAll.addEventListener("click", () => {
-          document
-            .querySelectorAll(".file-list")
-            .forEach((l) => l.classList.add("hidden"));
-          document
-            .querySelectorAll(".folder-toggle")
-            .forEach((b) => b.setAttribute("aria-expanded", "false"));
-          document
-            .querySelectorAll(".chev")
-            .forEach((c) => c.classList.remove("rotate-180"));
-        });
-      }
-    </script>
+    <!-- Footer -->
+    <footer class="bg-white border-t">
+      <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="text-center text-gray-500">
+          <p>Interactive Algorithms & Data Structures Learning Hub</p>
+          <p class="text-sm mt-2">
+            Click on any algorithm or data structure to explore interactive
+            visualizations
+          </p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
